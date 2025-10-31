@@ -36,14 +36,14 @@ $sortOptions = [
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>GrayShop katalog</title>
+    <title>GrayShop</title>
     <link rel="stylesheet" href="/assets/css/style.css">
     <script defer src="/assets/js/app.js"></script>
 </head>
 <body>
 <header class="site-header">
     <div class="logo-area">
-        <span class="logo">GrayShop</span>
+        <span class="logo"><em>Gray.</em>Shop</span>
         <button class="menu-toggle" aria-label="Otvori izbornik" data-menu-toggle>
             <span></span><span></span><span></span>
         </button>
