@@ -653,6 +653,12 @@ img {
         display: none;
     }
 
+    .logo-area {
+        width: auto;
+        gap: 1rem;
+        justify-content: flex-start;
+    }
+
     .desktop-filters {
         display: flex;
     }
