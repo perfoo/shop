@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setupDrawer(prefersReducedMotion);
     setupSortControls();
-    setupLightbox(prefersReducedMotion);
+    setupCardSliders(prefersReducedMotion);
     setupCardAnimations(prefersReducedMotion);
     setupPhotoSorter();
 });
@@ -81,79 +81,97 @@ function setupSortControls() {
     });
 }
 
-function setupLightbox(prefersReducedMotion) {
-    const modal = document.querySelector('[data-lightbox-modal]');
-    if (!modal) {
+function setupCardSliders(prefersReducedMotion) {
+    const sliders = document.querySelectorAll('[data-slider]');
+    if (!sliders.length) {
         return;
     }
-    const image = modal.querySelector('[data-lightbox-image]');
-    const closeBtn = modal.querySelector('[data-lightbox-close]');
-    const prevBtn = modal.querySelector('[data-lightbox-prev]');
-    const nextBtn = modal.querySelector('[data-lightbox-next]');
-    const triggers = document.querySelectorAll('[data-lightbox]');
-    let currentIndex = 0;
-    let lastFocus = null;
-    const photos = window.lightboxPhotos || [];
 
-    const open = (index) => {
-        if (!photos.length) {
+    sliders.forEach((slider) => {
+        const rawData = slider.dataset.sliderImages;
+        if (!rawData) {
             return;
         }
-        currentIndex = index;
-        image.src = photos[currentIndex];
-        modal.hidden = false;
-        modal.classList.add('lightbox-open');
-        lastFocus = document.activeElement;
-        closeBtn.focus();
-    };
 
-    const close = () => {
-        modal.classList.remove('lightbox-open');
-        modal.hidden = true;
-        image.src = '';
-        if (lastFocus) {
-            lastFocus.focus();
-        }
-    };
-
-    const showNext = (direction) => {
-        if (!photos.length) {
+        let images;
+        try {
+            images = JSON.parse(rawData);
+        } catch (error) {
+            console.error('Neispravan format slika za slider.', error);
             return;
         }
-        currentIndex = (currentIndex + direction + photos.length) % photos.length;
-        image.src = photos[currentIndex];
-    };
 
-    triggers.forEach((trigger) => {
-        trigger.addEventListener('click', (event) => {
-            event.preventDefault();
-            const index = Number(trigger.dataset.index || 0);
-            open(index);
+        if (!Array.isArray(images) || images.length === 0) {
+            return;
+        }
+
+        let index = 0;
+        const mainImage = slider.querySelector('[data-slider-main]');
+        const prevButton = slider.querySelector('[data-slider-prev]');
+        const nextButton = slider.querySelector('[data-slider-next]');
+        const dotsContainer = slider.querySelector('[data-slider-dots]');
+
+        if (!mainImage) {
+            return;
+        }
+
+        const update = () => {
+            const current = images[index];
+            if (!current) {
+                return;
+            }
+            const nextSrc = current.thumb || current.image;
+            if (nextSrc) {
+                mainImage.src = nextSrc;
+            }
+            mainImage.alt = `Fotografija ${index + 1}`;
+            if (dotsContainer) {
+                dotsContainer.querySelectorAll('.slider-dot').forEach((dot) => {
+                    dot.classList.toggle('is-active', Number(dot.dataset.index) === index);
+                });
+            }
+        };
+
+        const go = (direction) => {
+            index = (index + direction + images.length) % images.length;
+            update();
+        };
+
+        if (dotsContainer && dotsContainer.children.length === 0 && images.length > 1) {
+            images.forEach((_, dotIndex) => {
+                const dot = document.createElement('button');
+                dot.type = 'button';
+                dot.className = 'slider-dot' + (dotIndex === 0 ? ' is-active' : '');
+                dot.dataset.index = String(dotIndex);
+                dot.setAttribute('aria-label', `Prikaži fotografiju ${dotIndex + 1}`);
+                dot.addEventListener('click', () => {
+                    index = dotIndex;
+                    update();
+                });
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        prevButton?.addEventListener('click', () => go(-1));
+        nextButton?.addEventListener('click', () => go(1));
+
+        slider.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                go(-1);
+            }
+            if (event.key === 'ArrowRight') {
+                event.preventDefault();
+                go(1);
+            }
         });
+
+        if (prefersReducedMotion) {
+            slider.classList.add('slider-no-motion');
+        }
+
+        update();
     });
-
-    closeBtn?.addEventListener('click', close);
-    prevBtn?.addEventListener('click', () => showNext(-1));
-    nextBtn?.addEventListener('click', () => showNext(1));
-
-    document.addEventListener('keydown', (event) => {
-        if (modal.hidden) {
-            return;
-        }
-        if (event.key === 'Escape') {
-            close();
-        }
-        if (event.key === 'ArrowLeft') {
-            showNext(-1);
-        }
-        if (event.key === 'ArrowRight') {
-            showNext(1);
-        }
-    });
-
-    if (prefersReducedMotion) {
-        modal.classList.add('lightbox-no-motion');
-    }
 }
 
 function setupCardAnimations(prefersReducedMotion) {

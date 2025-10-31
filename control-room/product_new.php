@@ -16,7 +16,7 @@ require_login();
 $errors = [];
 $formData = [
     'title' => '',
-    'description' => '<p></p>',
+    'description' => '',
     'price' => '',
     'category' => allowed_categories()[0],
     'external_link' => '',
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $validation = validate_item_input($_POST);
         $formData = [
             'title' => $validation['data']['title'],
-            'description' => $validation['data']['description'],
+            'description' => $_POST['description'] ?? '',
             'price' => $_POST['price'] ?? '',
             'category' => $validation['data']['category'],
             'external_link' => $validation['data']['external_link'],
@@ -143,7 +143,7 @@ $categories = allowed_categories();
             <?php if (isset($errors['category'])): ?><span class="form-error"><?= htmlspecialchars($errors['category'], ENT_QUOTES, 'UTF-8') ?></span><?php endif; ?>
         </div>
         <div class="form-field form-field-full">
-            <label for="description">Opis (koristite &lt;p&gt; blokove)</label>
+            <label for="description">Opis (prazan red = novi odlomak)</label>
             <textarea id="description" name="description" rows="8" required><?= htmlspecialchars($formData['description'], ENT_QUOTES, 'UTF-8') ?></textarea>
             <?php if (isset($errors['description'])): ?><span class="form-error"><?= htmlspecialchars($errors['description'], ENT_QUOTES, 'UTF-8') ?></span><?php endif; ?>
         </div>

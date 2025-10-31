@@ -43,7 +43,7 @@ $sortOptions = [
 <body>
 <header class="site-header">
     <div class="logo-area">
-        <span class="logo"><em>Gray.</em>Shop</span>
+        <span class="logo">GrayShop</span>
         <button class="menu-toggle" aria-label="Otvori izbornik" data-menu-toggle>
             <span></span><span></span><span></span>
         </button>
@@ -92,8 +92,51 @@ $sortOptions = [
             <?php foreach ($products as $product): ?>
                 <article class="product-card" data-animate>
                     <div class="card-image">
-                        <?php if (!empty($product['cover'])): ?>
-                            <img src="/uploads/<?= htmlspecialchars($product['id'], ENT_QUOTES, 'UTF-8') ?>/<?= htmlspecialchars($product['cover'], ENT_QUOTES, 'UTF-8') ?>" alt="" loading="lazy">
+                        <?php
+                        $photoList = [];
+                        if (!empty($product['photos']) && is_array($product['photos'])) {
+                            $photoList = array_values(array_filter($product['photos'], static function ($photo) {
+                                return is_array($photo) && (!empty($photo['thumb']) || !empty($photo['image']));
+                            }));
+                        }
+
+                        if (empty($photoList) && (!empty($product['cover']) || !empty($product['cover_image']))) {
+                            $photoList = [[
+                                'thumb' => $product['cover'] ?? '',
+                                'image' => $product['cover_image'] ?? ($product['cover'] ?? ''),
+                            ]];
+                        }
+
+                        $sliderSources = array_values(array_filter(array_map(static function ($photo) use ($product) {
+                            $thumb = $photo['thumb'] ?? '';
+                            $image = $photo['image'] ?? '';
+                            if ($thumb === '' && $image === '') {
+                                return null;
+                            }
+                            $base = '/media.php?id=' . rawurlencode($product['id']) . '&file=';
+                            $thumbPath = $thumb !== '' ? $base . rawurlencode($thumb) : ($image !== '' ? $base . rawurlencode($image) : '');
+                            if ($thumbPath === '') {
+                                return null;
+                            }
+                            $imagePath = $image !== '' ? $base . rawurlencode($image) : $thumbPath;
+                            return [
+                                'thumb' => $thumbPath,
+                                'image' => $imagePath,
+                            ];
+                        }, $photoList)));
+                        ?>
+
+                        <?php if (!empty($sliderSources)): ?>
+                            <div class="card-slider" data-slider tabindex="0" data-slider-images='<?= htmlspecialchars(json_encode($sliderSources, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8') ?>'>
+                                <?php if (count($sliderSources) > 1): ?>
+                                    <button class="slider-nav slider-prev" type="button" aria-label="Prethodna fotografija" data-slider-prev>&lsaquo;</button>
+                                <?php endif; ?>
+                                <img src="<?= htmlspecialchars($sliderSources[0]['thumb'], ENT_QUOTES, 'UTF-8') ?>" alt="Fotografija 1" loading="lazy" data-slider-main>
+                                <?php if (count($sliderSources) > 1): ?>
+                                    <button class="slider-nav slider-next" type="button" aria-label="Sljedeća fotografija" data-slider-next>&rsaquo;</button>
+                                    <div class="slider-dots" data-slider-dots></div>
+                                <?php endif; ?>
+                            </div>
                         <?php else: ?>
                             <div class="placeholder" aria-hidden="true"></div>
                         <?php endif; ?>
@@ -103,15 +146,11 @@ $sortOptions = [
                         <p class="card-category"><?= htmlspecialchars($product['category'], ENT_QUOTES, 'UTF-8') ?></p>
                         <p class="card-price"><?= format_price_from_cents((int)$product['price_cents']) ?></p>
                         <p class="card-excerpt"><?= htmlspecialchars($product['excerpt'], ENT_QUOTES, 'UTF-8') ?></p>
-                        <div class="card-actions">
-                            <a class="btn-link" href="/item.php?id=<?= urlencode($product['id']) ?>">Detalji</a>
-                            <?php if (!empty($product['cover_image'])): ?>
-                                <a class="btn-ghost" href="/item.php?id=<?= urlencode($product['id']) ?>#galerija">Galerija</a>
-                            <?php endif; ?>
-                            <?php if (!empty($product['external_link'])): ?>
+                        <?php if (!empty($product['external_link'])): ?>
+                            <div class="card-actions">
                                 <a class="btn-external" href="<?= htmlspecialchars($product['external_link'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Detalji - link</a>
-                            <?php endif; ?>
-                        </div>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </article>
             <?php endforeach; ?>

@@ -21,7 +21,7 @@ function validate_item_input(array $input): array
 
     $description = sanitize_description($input['description'] ?? '');
     if ($description === '') {
-        $errors['description'] = 'Opis je obavezan i treba koristiti <p> oznake.';
+        $errors['description'] = 'Opis je obavezan.';
     }
     $data['description'] = $description;
 
@@ -62,11 +62,31 @@ function sanitize_description(string $description): string
         return '';
     }
 
-    $description = strip_tags($description, '<p>');
-    // Remove attributes from <p> tags for safety.
-    $description = preg_replace('/<p[^>]*>/i', '<p>', $description) ?? $description;
+    $containsHtml = str_contains($description, '<');
 
-    // Ensure paragraphs are properly closed.
+    if (!$containsHtml) {
+        $paragraphs = preg_split('/\r\n|\r|\n/', $description) ?: [];
+        $paragraphs = array_values(array_filter(array_map('trim', $paragraphs), static fn($line) => $line !== ''));
+
+        if (empty($paragraphs)) {
+            return '';
+        }
+
+        return implode('', array_map(static fn($line) => '<p>' . htmlspecialchars($line, ENT_QUOTES, 'UTF-8') . '</p>', $paragraphs));
+    }
+
+    $description = strip_tags($description, '<p>');
+    $description = preg_replace('/<p[^>]*>/i', '<p>', $description) ?? $description;
+    $description = trim($description);
+
+    if ($description === '') {
+        return '';
+    }
+
+    if (!str_contains($description, '<p>')) {
+        return '<p>' . htmlspecialchars($description, ENT_QUOTES, 'UTF-8') . '</p>';
+    }
+
     if (substr_count($description, '<p>') !== substr_count($description, '</p>')) {
         $description .= '</p>';
     }
@@ -79,7 +99,7 @@ function sanitize_description(string $description): string
  */
 function create_excerpt(string $description, int $limit = 160): string
 {
-    $text = trim(strip_tags($description));
+    $text = trim(html_entity_decode(strip_tags($description), ENT_QUOTES, 'UTF-8'));
     if (mb_strlen($text) <= $limit) {
         return $text;
     }

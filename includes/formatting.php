@@ -32,3 +32,18 @@ function format_price_from_cents(int $cents): string
     $euros = $cents / 100;
     return number_format($euros, 2, ',', '.') . ' €';
 }
+
+/**
+ * Convert stored HTML description back to textarea-friendly plain text.
+ */
+function description_to_textarea(string $description): string
+{
+    if ($description === '') {
+        return '';
+    }
+
+    $normalized = preg_replace('/<\/p>\s*<p>/i', "\n\n", $description) ?? $description;
+    $normalized = str_replace(['<p>', '</p>'], ['', ''], $normalized);
+
+    return trim(html_entity_decode($normalized, ENT_QUOTES, 'UTF-8'));
+}

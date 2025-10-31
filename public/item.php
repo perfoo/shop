@@ -14,7 +14,9 @@ if (!$item) {
     exit;
 }
 
-$photos = $item['photos'] ?? [];
+$photos = array_values(array_filter($item['photos'] ?? [], static function ($photo) {
+    return is_array($photo) && (!empty($photo['image']) || !empty($photo['thumb']));
+}));
 ?>
 <!DOCTYPE html>
 <html lang="hr">
@@ -50,30 +52,28 @@ $photos = $item['photos'] ?? [];
             <?= $item['description'] ?>
         </section>
         <?php if (!empty($photos)): ?>
-            <section class="item-gallery" id="galerija" aria-label="Galerija fotografija">
+            <section class="item-gallery" aria-label="Fotografije artikla">
                 <div class="gallery-grid">
                     <?php foreach ($photos as $index => $photo): ?>
-                        <button class="gallery-thumb" data-lightbox="<?= htmlspecialchars($photo['image'], ENT_QUOTES, 'UTF-8') ?>" data-index="<?= $index ?>">
-                            <img src="/uploads/<?= htmlspecialchars($item['id'], ENT_QUOTES, 'UTF-8') ?>/<?= htmlspecialchars($photo['thumb'], ENT_QUOTES, 'UTF-8') ?>" alt="Fotografija <?= $index + 1 ?>">
-                        </button>
+                        <?php
+                        $imageFile = $photo['image'] ?? ($photo['thumb'] ?? '');
+                        $thumbFile = $photo['thumb'] ?? $imageFile;
+                        $imagePath = $imageFile !== '' ? '/media.php?id=' . rawurlencode($item['id']) . '&file=' . rawurlencode($imageFile) : '';
+                        $thumbPath = $thumbFile !== '' ? '/media.php?id=' . rawurlencode($item['id']) . '&file=' . rawurlencode($thumbFile) : '';
+                        ?>
+                        <?php if ($thumbPath !== ''): ?>
+                            <figure class="gallery-image">
+                                <img src="<?= htmlspecialchars($thumbPath, ENT_QUOTES, 'UTF-8') ?>" alt="Fotografija <?= $index + 1 ?>">
+                                <?php if ($imagePath !== '' && $imagePath !== $thumbPath): ?>
+                                    <a class="gallery-link" href="<?= htmlspecialchars($imagePath, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Otvori veću sliku</a>
+                                <?php endif; ?>
+                            </figure>
+                        <?php endif; ?>
                     <?php endforeach; ?>
                 </div>
             </section>
         <?php endif; ?>
     </article>
 </main>
-<div class="lightbox" data-lightbox-modal hidden>
-    <button class="lightbox-close" aria-label="Zatvori" data-lightbox-close>&times;</button>
-    <div class="lightbox-content" role="dialog" aria-modal="true">
-        <img src="" alt="" data-lightbox-image>
-        <button class="lightbox-prev" aria-label="Prethodna" data-lightbox-prev>&lsaquo;</button>
-        <button class="lightbox-next" aria-label="Sljedeća" data-lightbox-next>&rsaquo;</button>
-    </div>
-</div>
-<script>
-    window.lightboxPhotos = <?= json_encode(array_map(static function ($photo) use ($item) {
-        return '/uploads/' . $item['id'] . '/' . $photo['image'];
-    }, $photos), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>;
-</script>
 </body>
 </html>

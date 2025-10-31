@@ -203,6 +203,23 @@ function create_index_entry(array $item): array
         'created_at' => $item['created_at'],
         'cover' => $item['photos'][0]['thumb'] ?? '',
         'cover_image' => $item['photos'][0]['image'] ?? '',
+        'photos' => array_values(array_filter(array_map(static function ($photo) {
+            if (!is_array($photo)) {
+                return null;
+            }
+
+            $thumb = $photo['thumb'] ?? '';
+            $image = $photo['image'] ?? '';
+
+            if ($thumb === '' && $image === '') {
+                return null;
+            }
+
+            return [
+                'thumb' => $thumb,
+                'image' => $image !== '' ? $image : $thumb,
+            ];
+        }, $item['photos'] ?? []))),
         'external_link' => $item['external_link'] ?? '',
     ];
 }
