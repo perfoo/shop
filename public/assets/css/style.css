@@ -1,6 +1,8 @@
 :root {
 
     --bg: #FFFFFF;        /* čista bijela — glavna pozadina */
+    --bg-soft: #F2F5FF;   /* vrlo svijetla plava — mekana pozadina */
+    --bg-soft-2: #FFF4F4; /* blago roza — dekorativni preljev */
     --text: #343A40;      /* tamno siva — osnovni tekst */
     --muted: #6C757D;     /* neutralna siva — sekundarni tekst */
     --line: #DEE2E6;      /* svijetlosiva — linije i obrubi */
@@ -9,6 +11,7 @@
     --surface: #F8F9FA;   /* svijetla površina (kartice, sekcije) */
     --surface-2: #E9ECEF; /* druga razina pozadine */
     --brand: #2D4191;     /* tamno plava — brand boja (header, gumbi, footer) */
+    --brand-mid: #4D63C4; /* srednja plava — prijelaz prema akcentu */
     --brand-dark: #1F2E69; /* još tamnija plava — hover ili kontrastni tekst na svijetloj podlozi */
     --transition: 220ms ease; /* glatka prijelazna animacija */
 
@@ -22,9 +25,10 @@
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: var(--bg);
+    background: linear-gradient(180deg, var(--bg-soft) 0%, var(--bg) 40%, var(--bg-soft-2) 100%);
     color: var(--text);
     line-height: 1.6;
+    min-height: 100vh;
 }
 
 body.drawer-visible {
@@ -51,8 +55,14 @@ img {
     align-items: center;
     justify-content: space-between;
     padding: 1rem;
-    border-bottom: 1px solid var(--line);
-    background: var(--surface);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    background: linear-gradient(135deg, var(--brand) 0%, var(--brand-mid) 60%, var(--accent) 100%);
+    color: #fff;
+    box-shadow: 0 12px 32px rgba(31, 46, 105, 0.25);
+}
+
+.site-header a {
+    color: inherit;
 }
 
 .detail-header {
@@ -71,11 +81,12 @@ img {
     font-weight: 800;
     font-size: 1.5rem;
     letter-spacing: 0.05em;
-    color: var(--accent);
+    color: #fff;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .logo em {
-    color: var(--muted);
+    color: rgba(255, 255, 255, 0.75);
 
 }
 
@@ -92,7 +103,7 @@ img {
 .menu-toggle span {
     width: 1.5rem;
     height: 2px;
-    background: var(--text);
+    background: rgba(255, 255, 255, 0.9);
     border-radius: 999px;
 }
 
@@ -100,6 +111,10 @@ img {
     display: none;
     gap: 1rem;
     align-items: center;
+}
+
+.desktop-filters .chip-label {
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .chip-group {
@@ -118,13 +133,20 @@ img {
     padding: 0.4rem 0.9rem;
     border-radius: 999px;
     border: 1px solid var(--line);
-    transition: background var(--transition), color var(--transition), border var(--transition);
+    transition: background var(--transition), color var(--transition), border var(--transition), box-shadow var(--transition);
+    background: rgba(255, 255, 255, 0.72);
 }
 
 .chip-active {
     color: #fff;
     border-color: transparent;
     background-image: linear-gradient(to bottom right, var(--accent), var(--accent-strong));
+    box-shadow: 0 6px 16px rgba(230, 57, 70, 0.25);
+}
+
+.chip:hover {
+    border-color: rgba(45, 65, 145, 0.35);
+    box-shadow: 0 4px 12px rgba(77, 99, 196, 0.18);
 }
 
 .sort-control {
@@ -160,7 +182,7 @@ img {
 
 .drawer-content {
     width: min(80vw, 320px);
-    background: var(--surface-2);
+    background: linear-gradient(180deg, rgba(233, 236, 239, 0.95) 0%, rgba(255, 255, 255, 0.95) 100%);
     height: 100%;
     padding: 1.5rem;
     transform: translateX(100%);
@@ -189,6 +211,7 @@ img {
 
 .catalog {
     padding: 1.5rem 1rem 3rem;
+    position: relative;
 }
 
 .card-grid {
@@ -198,14 +221,14 @@ img {
 }
 
 .product-card {
-    border: 1px solid var(--line);
+    border: 1px solid rgba(45, 65, 145, 0.12);
     border-radius: 1rem;
     overflow: hidden;
-    background: var(--bg);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 244, 244, 0.88) 100%);
     display: flex;
     flex-direction: column;
     min-height: 100%;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 12px 30px rgba(45, 65, 145, 0.08);
     opacity: 0;
     transform: translateY(20px);
     transition: transform var(--transition), opacity var(--transition);
@@ -214,6 +237,11 @@ img {
 .product-card.animate-in {
     opacity: 1;
     transform: translateY(0);
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 38px rgba(45, 65, 145, 0.18);
 }
 
 .card-image {
@@ -233,7 +261,7 @@ img {
     width: 100%;
     aspect-ratio: 4 / 3;
     object-fit: cover;
-    background: var(--surface-2);
+    background: linear-gradient(135deg, rgba(77, 99, 196, 0.18), rgba(255, 107, 107, 0.12));
     border-radius: 1rem 1rem 0 0;
 }
 
@@ -311,11 +339,13 @@ img {
 
 .card-category {
     font-size: 0.85rem;
-    color: var(--muted);
+    color: var(--brand-dark);
+    letter-spacing: 0.04em;
 }
 
 .card-price {
     font-weight: 600;
+    color: var(--accent-strong);
 }
 
 .card-excerpt {
@@ -353,13 +383,13 @@ img {
 }
 
 .btn-ghost {
-    border-color: var(--line);
-    color: var(--text);
-    background: transparent;
+    border-color: rgba(45, 65, 145, 0.35);
+    color: var(--brand-dark);
+    background: rgba(77, 99, 196, 0.08);
 }
 
 .btn-external {
-    background: var(--surface);
+    background: rgba(255, 244, 244, 0.85);
     border-color: var(--accent);
     color: var(--accent-strong);
 }
@@ -367,11 +397,12 @@ img {
 .btn-primary {
     background-image: linear-gradient(to bottom right, var(--accent), var(--accent-strong));
     color: #fff;
+    box-shadow: 0 10px 24px rgba(230, 57, 70, 0.28);
 }
 
 .btn-secondary {
-    background: var(--surface);
-    border-color: var(--line);
+    background: rgba(77, 99, 196, 0.12);
+    border-color: rgba(45, 65, 145, 0.24);
 }
 
 .btn-danger {
@@ -386,6 +417,7 @@ img {
 .btn-secondary:hover,
 .btn-danger:hover {
     transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(31, 46, 105, 0.18);
 }
 
 .btn-link:focus-visible,
@@ -407,9 +439,10 @@ img {
 .site-footer {
     padding: 2rem 1rem;
     text-align: center;
-    border-top: 1px solid var(--line);
-    background: var(--surface);
-    color: var(--muted);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand) 60%, var(--accent-strong) 100%);
+    color: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 -12px 28px rgba(31, 46, 105, 0.2);
 }
 
 .item-page {
@@ -421,11 +454,11 @@ img {
 .item-card {
     max-width: 880px;
     width: 100%;
-    background: var(--bg);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(242, 245, 255, 0.92) 100%);
     border-radius: 1rem;
     padding: 1.5rem;
-    border: 1px solid var(--line);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(45, 65, 145, 0.18);
+    box-shadow: 0 14px 32px rgba(45, 65, 145, 0.12);
 }
 
 .item-meta {
@@ -553,11 +586,11 @@ img {
 .auth-card {
     max-width: 360px;
     margin: 10vh auto;
-    background: var(--bg);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(242, 245, 255, 0.92) 100%);
     padding: 2rem;
     border-radius: 1rem;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
-    border: 1px solid var(--line);
+    box-shadow: 0 18px 36px rgba(45, 65, 145, 0.16);
+    border: 1px solid rgba(45, 65, 145, 0.18);
 }
 
 .form-grid {
@@ -639,10 +672,10 @@ img {
     max-width: 480px;
     margin: 10vh auto;
     padding: 2rem;
-    background: var(--bg);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 244, 244, 0.92) 100%);
     border-radius: 1rem;
-    border: 1px solid var(--line);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(45, 65, 145, 0.18);
+    box-shadow: 0 18px 36px rgba(45, 65, 145, 0.14);
     display: flex;
     flex-direction: column;
     gap: 1rem;
