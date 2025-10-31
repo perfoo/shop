@@ -2,9 +2,9 @@
 declare(strict_types=1);
 
 $config = require __DIR__ . '/../includes/config.php';
-require __DIR__ . '/../includes/storage.php';
-require __DIR__ . '/../includes/formatting.php';
-require __DIR__ . '/../includes/validators.php';
+require_once __DIR__ . '/../includes/storage.php';
+require_once __DIR__ . '/../includes/formatting.php';
+require_once __DIR__ . '/../includes/validators.php';
 
 $categoryParam = $_GET['category'] ?? 'Sve';
 $sortParam = $_GET['sort'] ?? 'novo';
@@ -37,8 +37,8 @@ $sortOptions = [
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>GrayShop katalog</title>
-    <link rel="stylesheet" href="/public/assets/css/style.css">
-    <script defer src="/public/assets/js/app.js"></script>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <script defer src="/assets/js/app.js"></script>
 </head>
 <body>
 <header class="site-header">
@@ -104,9 +104,9 @@ $sortOptions = [
                         <p class="card-price"><?= format_price_from_cents((int)$product['price_cents']) ?></p>
                         <p class="card-excerpt"><?= htmlspecialchars($product['excerpt'], ENT_QUOTES, 'UTF-8') ?></p>
                         <div class="card-actions">
-                            <a class="btn-link" href="/public/item.php?id=<?= urlencode($product['id']) ?>">Detalji</a>
+                            <a class="btn-link" href="/item.php?id=<?= urlencode($product['id']) ?>">Detalji</a>
                             <?php if (!empty($product['cover_image'])): ?>
-                                <a class="btn-ghost" href="/public/item.php?id=<?= urlencode($product['id']) ?>#galerija">Galerija</a>
+                                <a class="btn-ghost" href="/item.php?id=<?= urlencode($product['id']) ?>#galerija">Galerija</a>
                             <?php endif; ?>
                             <?php if (!empty($product['external_link'])): ?>
                                 <a class="btn-external" href="<?= htmlspecialchars($product['external_link'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener">Detalji - link</a>

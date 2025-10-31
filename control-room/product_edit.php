@@ -2,12 +2,12 @@
 declare(strict_types=1);
 
 $config = require __DIR__ . '/../includes/config.php';
-require __DIR__ . '/../includes/auth.php';
-require __DIR__ . '/../includes/csrf.php';
-require __DIR__ . '/../includes/storage.php';
-require __DIR__ . '/../includes/validators.php';
-require __DIR__ . '/../includes/images.php';
-require __DIR__ . '/../includes/formatting.php';
+require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/csrf.php';
+require_once __DIR__ . '/../includes/storage.php';
+require_once __DIR__ . '/../includes/validators.php';
+require_once __DIR__ . '/../includes/images.php';
+require_once __DIR__ . '/../includes/formatting.php';
 
 require_https();
 ensure_session($config);
@@ -143,8 +143,8 @@ $categories = allowed_categories();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Uredi artikl</title>
-    <link rel="stylesheet" href="/public/assets/css/style.css">
-    <script defer src="/public/assets/js/app.js"></script>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <script defer src="/assets/js/app.js"></script>
 </head>
 <body class="admin-body">
 <header class="admin-header">

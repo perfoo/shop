@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 $config = require __DIR__ . '/../includes/config.php';
-require __DIR__ . '/../includes/auth.php';
-require __DIR__ . '/../includes/csrf.php';
+require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/csrf.php';
 
 require_https();
 ensure_session($config);
@@ -36,7 +36,7 @@ $token = get_csrf_token();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Kontrolna soba - prijava</title>
-    <link rel="stylesheet" href="/public/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body class="admin-body">
     <main class="auth-card" aria-labelledby="auth-title">

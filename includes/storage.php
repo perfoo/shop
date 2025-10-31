@@ -18,7 +18,12 @@ function load_products_index(array $config): array
     }
 
     $json = file_get_contents($config['products_index']);
-    return $json ? json_decode($json, true, 512, JSON_THROW_ON_ERROR) : [];
+    if ($json === false) {
+        return [];
+    }
+
+    $decoded = decode_json($json);
+    return is_array($decoded) ? $decoded : [];
 }
 
 /**
@@ -40,7 +45,12 @@ function load_item(array $config, string $id): ?array
     }
 
     $json = file_get_contents($path);
-    return $json ? json_decode($json, true, 512, JSON_THROW_ON_ERROR) : null;
+    if ($json === false) {
+        return null;
+    }
+
+    $decoded = decode_json($json);
+    return is_array($decoded) ? $decoded : null;
 }
 
 /**
@@ -195,4 +205,20 @@ function create_index_entry(array $item): array
         'cover_image' => $item['photos'][0]['image'] ?? '',
         'external_link' => $item['external_link'] ?? '',
     ];
+}
+
+/**
+ * Decode a JSON string safely and return null when invalid.
+ */
+function decode_json(string $json): mixed
+{
+    if (trim($json) === '') {
+        return null;
+    }
+
+    try {
+        return json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+    } catch (\JsonException) {
+        return null;
+    }
 }

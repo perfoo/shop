@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 $config = require __DIR__ . '/../includes/config.php';
-require __DIR__ . '/../includes/storage.php';
-require __DIR__ . '/../includes/formatting.php';
+require_once __DIR__ . '/../includes/storage.php';
+require_once __DIR__ . '/../includes/formatting.php';
 
 $id = $_GET['id'] ?? '';
 $item = $id ? load_item($config, $id) : null;
@@ -22,16 +22,16 @@ $photos = $item['photos'] ?? [];
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= htmlspecialchars($item['title'], ENT_QUOTES, 'UTF-8') ?> - GrayShop</title>
-    <link rel="stylesheet" href="/public/assets/css/style.css">
-    <script defer src="/public/assets/js/app.js"></script>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <script defer src="/assets/js/app.js"></script>
 </head>
 <body>
 <header class="site-header detail-header">
     <div class="logo-area">
-        <a class="logo" href="/public/index.php">GrayShop</a>
+        <a class="logo" href="/index.php">GrayShop</a>
     </div>
     <nav class="detail-actions" aria-label="Povratak">
-        <a href="/public/index.php" class="btn-secondary">Natrag na katalog</a>
+        <a href="/index.php" class="btn-secondary">Natrag na katalog</a>
     </nav>
 </header>
 <main class="item-page">

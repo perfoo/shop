@@ -2,9 +2,9 @@
 declare(strict_types=1);
 
 $config = require __DIR__ . '/../includes/config.php';
-require __DIR__ . '/../includes/auth.php';
-require __DIR__ . '/../includes/storage.php';
-require __DIR__ . '/../includes/formatting.php';
+require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../includes/storage.php';
+require_once __DIR__ . '/../includes/formatting.php';
 
 require_https();
 ensure_session($config);
@@ -19,7 +19,7 @@ $count = count($items);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Kontrolna soba - pregled</title>
-    <link rel="stylesheet" href="/public/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body class="admin-body">
     <header class="admin-header">
