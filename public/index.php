@@ -36,7 +36,7 @@ $sortOptions = [
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>GrayShop</title>
+    <title>Gray.Shop</title>
     <link rel="stylesheet" href="/assets/css/style.css">
     <script defer src="/assets/js/app.js"></script>
 </head>
@@ -159,7 +159,7 @@ $sortOptions = [
 </main>
 <footer class="site-footer">
     <p class="disclaimer" style="font-size: 0.75em; color: #666; margin-bottom: 1em;">*Ova web stranica izrađena je kao projekt u sklopu edukacijskog programa za frontend web programiranje. Kao takva, ne predstavlja stvarnu trgovinu, niti stvarne proizvode koji se prodaju, niti stvarne cijene. Izvori korištenih slika preuzeti su s interneta.</p>
-    <p>&copy; <?= date('Y') ?> GrayShop katalog</p>
+    <p>&copy; <?= date('Y') ?> Gray.Shop</p>
 </footer>
 <script>
     window.catalogState = {
