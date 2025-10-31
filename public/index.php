@@ -158,6 +158,7 @@ $sortOptions = [
     <?php endif; ?>
 </main>
 <footer class="site-footer">
+    <p class="disclaimer" style="font-size: 0.75em; color: #666; margin-bottom: 1em;">*Ova web stranica izrađena je kao projekt u sklopu edukacijskog programa za frontend web programiranje. Kao takva, ne predstavlja stvarnu trgovinu, niti stvarne proizvode koji se prodaju, niti stvarne cijene. Izvori korištenih slika preuzeti su s interneta.</p>
     <p>&copy; <?= date('Y') ?> GrayShop katalog</p>
 </footer>
 <script>
