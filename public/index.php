@@ -43,7 +43,7 @@ $sortOptions = [
 <body>
 <header class="site-header">
     <div class="logo-area">
-        <span class="logo">GrayShop</span>
+        <span class="logo"><em>Gray.</em>Shop</span>
         <button class="menu-toggle" aria-label="Otvori izbornik" data-menu-toggle>
             <span></span><span></span><span></span>
         </button>

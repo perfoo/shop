@@ -1,13 +1,15 @@
 :root {
-    --bg: #FFFFFF;
-    --text: #1F1F1F;
-    --muted: #6F6F6F;
-    --line: #E6E6E6;
-    --accent: #C7A446;
-    --accent-strong: #A8872E;
-    --surface: #F8F8F8;
-    --surface-2: #F2F2F2;
-    --transition: 220ms ease;
+    --bg: #FFFFFF;        /* čista bijela — glavna pozadina */
+    --text: #343A40;      /* tamno siva — osnovni tekst */
+    --muted: #6C757D;     /* neutralna siva — sekundarni tekst */
+    --line: #DEE2E6;      /* svijetlosiva — linije i obrubi */
+    --accent: #FF6B6B;    /* koraljno-crvena — primarni akcent (CTA, linkovi) */
+    --accent-strong: #E63946; /* zasićenija crveno-ružičasta — hover/aktivno stanje */
+    --surface: #F8F9FA;   /* svijetla površina (kartice, sekcije) */
+    --surface-2: #E9ECEF; /* druga razina pozadine */
+    --brand: #2D4191;     /* tamno plava — brand boja (header, gumbi, footer) */
+    --brand-dark: #1F2E69; /* još tamnija plava — hover ili kontrastni tekst na svijetloj podlozi */
+    --transition: 220ms ease; /* glatka prijelazna animacija */
 }
 
 * {
@@ -61,9 +63,14 @@ img {
 }
 
 .logo {
-    font-weight: 600;
-    font-size: 1.25rem;
+    font-weight: 800;
+    font-size: 1.5rem;
     letter-spacing: 0.05em;
+    color: var(--accent);
+}
+
+.logo em {
+    color: var(--muted);
 }
 
 .menu-toggle {
