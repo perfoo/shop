@@ -1,0 +1,34 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * Price formatting helpers using hr-HR conventions.
+ */
+function parse_price_to_cents(string $input): ?int
+{
+    $normalized = trim($input);
+    if ($normalized === '') {
+        return null;
+    }
+
+    $normalized = str_replace([' ', "\u{00A0}", "\u{202F}"], '', $normalized);
+    $normalized = str_replace('.', '', $normalized);
+    $normalized = str_replace(',', '.', $normalized);
+
+    if (!is_numeric($normalized)) {
+        return null;
+    }
+
+    $value = round((float)$normalized * 100);
+    if ($value < 0) {
+        return null;
+    }
+
+    return (int)$value;
+}
+
+function format_price_from_cents(int $cents): string
+{
+    $euros = $cents / 100;
+    return number_format($euros, 2, ',', '.') . ' €';
+}
