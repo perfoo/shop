@@ -26,8 +26,8 @@ Lightweight PHP katalog bez košarice, s administracijom "Kontrolna soba" i pohr
 4. Za prijavu koristite zadanu lozinku `SurveillanceRoom` ili postavite novu prema uputama niže.
 
 ## Instalacija na Hostinger/Apache
-1. Prijavite se na kontrolni panel i postavite root direktorij web stranice na `/public` ako je moguće. Ako to nije izvedivo, pristup frontendu je preko `public/index.php`, a admin sučelju preko `/control-room/`.
-2. Prenesite sve datoteke iz repozitorija na poslužitelj, zadržavajući strukturu mapa.
+1. Prijavite se na kontrolni panel. Na Hostingeru preimenujte lokalni direktorij `public/` u `public_html/` prije prijenosa (ili prenesite sadržaj `public/` direktno u `public_html/`, jer je to zadani web root). Na drugim Apache postavkama možete postaviti root na `public/`.
+2. Prenesite sve datoteke iz repozitorija na poslužitelj, zadržavajući strukturu mapa (nakon eventualnog preimenovanja `public/` → `public_html/`).
 3. Provjerite dozvole direktorija:
    - `data/` i `uploads/` moraju biti zapisivi za PHP proces (`chmod 775` ili `chmod 770` ovisno o konfiguraciji).
 4. U `includes/config.php` ostaje zadani hash lozinke (za lozinku `SurveillanceRoom`). Ako želite prilagodbu:
