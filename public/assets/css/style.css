@@ -86,7 +86,7 @@ img {
 }
 
 .logo em {
-    color: var(--muted);
+    color: rgba(255, 255, 255, 0.75);
 
 }
 
